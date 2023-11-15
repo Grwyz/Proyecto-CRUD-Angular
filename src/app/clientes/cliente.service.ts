@@ -22,6 +22,9 @@ private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
     );
   }
 
+  /* En este caso se hizo uso de una clase nueva (ExpectedResponse)
+     que contiene al cliente y al mensaje para realizar el post
+     (Se hace de otra forma en el método update, pero ambas formas son válidas)*/
   create(cliente: Cliente) : Observable<ExpectedResponse> {
     return this.http.post<ExpectedResponse>(this.urlEndPoint, cliente, {headers: this.httpHeaders}).pipe(
       catchError(e => {
@@ -43,8 +46,12 @@ private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
     );
   }
 
-  update(cliente: Cliente): Observable<ExpectedResponse> {
-    return this.http.put<ExpectedResponse>(`${this.urlEndPoint}/${cliente.id}`, cliente, {headers: this.httpHeaders}).pipe(
+  /* En este caso se convierte la respuesta de forma explícita con el operador map
+     para hacer el put (Se hace de otra forma en el método create, 
+     pero ambas formas son válidas)*/
+  update(cliente: Cliente): Observable<Cliente> {
+    return this.http.put(`${this.urlEndPoint}/${cliente.id}`, cliente, {headers: this.httpHeaders}).pipe(
+      map((response: any) => response.cliente as Cliente),
       catchError(e => {
         console.error(e.error.mensaje);
         Swal.fire(e.error.mensaje, e.error.error, 'error');

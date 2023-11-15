@@ -34,24 +34,28 @@ export class FormComponent implements OnInit{
     })
   }
 
+  /* Suscribir el resultado del método (Se hace de forma diferente
+     en el método update, pero ambas formas son válidas) */
   create(): void {
     this.clienteService.create(this.cliente).subscribe((response) => {
       this.router.navigate(['/clientes'])
       console.log(response)
       Swal.fire(
         'Nuevo cliente',
-        `Cliente ${response.cliente.nombre} creado con éxito!`,
+        `${response.mensaje} - ${response.cliente.nombre}`,
         'success'
       )
     })
   }
 
+  /* Suscribir el resultado del método (Se hace de forma diferente
+     en el método create, pero ambas formas son válidas) */
   update(): void {
-    this.clienteService.update(this.cliente).subscribe((response) => {
+    this.clienteService.update(this.cliente).subscribe((cliente) => {
       this.router.navigate(['/clientes']);
       Swal.fire(
         'Cliente actualizado',
-        `Cliente ${response.cliente.nombre} actualizado con éxito`,
+        `El cliente ${cliente.nombre} ha sido actualizado con éxito!`,
         'success'
       );
     });
